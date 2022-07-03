@@ -1,2 +1,3 @@
-testing/*
+testing/**
+!testing/start.ps1
 *.class
