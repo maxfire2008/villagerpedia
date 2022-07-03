@@ -1,18 +1,20 @@
 package net.maxstuff.villagerpedia;
 
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import net.maxstuff.villagerpedia.AddToEntitlements;
+import net.maxstuff.villagerpedia.VillagerClick;
+import net.maxstuff.villagerpedia.Database;
 
 public class App extends JavaPlugin {
     @Override
     public void onEnable() {
         getLogger().info("Hello, SpigotMC!");
-        getServer().getPluginManager().registerEvents(new AddToEntitlements(), this);
+        getServer().getPluginManager().registerEvents(new VillagerClick(), this);
     }
 
     @Override
     public void onDisable() {
+        Database database = Database.getInstance();
+        database.save();
         getLogger().info("See you again, SpigotMC!");
     }
 }
