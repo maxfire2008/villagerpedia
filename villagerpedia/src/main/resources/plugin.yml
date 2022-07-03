@@ -1,0 +1,4 @@
+main: net.maxstuff.villagerpedia.App
+name: villagerpedia
+version: 1.0-SNAPSHOT
+api-version: 1.19

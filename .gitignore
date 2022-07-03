@@ -1,4 +1,5 @@
 testing/**
 !testing/start.ps1
+!testing/update-plugin.ps1
 *.class
 villagerpedia/target/**
