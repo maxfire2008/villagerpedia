@@ -1,4 +1,4 @@
-package dev.cibmc.spigot.blankplugin;
+package net.maxstuff.villagerpedia;
 import org.bukkit.plugin.java.JavaPlugin;
 public class App extends JavaPlugin {
     @Override
