@@ -7,13 +7,19 @@ import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
-import com.google.gson.*;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.util.Map;
+import java.util.UUID;
 
 import java.time.LocalDateTime;
 
 public class Database {
-
     private static Database database = new Database();
+    private static JSONObject database_json;
 
     /*
      * A private Constructor prevents any other
@@ -40,9 +46,13 @@ public class Database {
         }
         try {
             String string = Files.readString(path);
-            JsonElement jsonElement = JsonParser.parseString(string);
-            JsonObject jsonObject = jsonElement.getAsJsonObject();
-            System.out.println(jsonObject.keySet());
+            JSONParser parser = new JSONParser();
+            try {
+                database_json = (JSONObject) parser.parse(string);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            // System.out.println(jsonObject.keySet());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -63,16 +73,35 @@ public class Database {
     }
 
     /* Other methods protected by singleton-ness */
-    protected static void updateVilager(String uuid) {
-        System.out.println(uuid);
+    protected static void updateVillager(UUID player, JSONObject villager) {
+        System.out.println(player);
+        JSONObject player_db;
+        if (database_json.containsKey(player)) {
+            player_db = (JSONObject) database_json.get(player);
+        } else {
+            player_db = new JSONObject();
+        }
+        player_db.put(villager.get("uuid"),villager);
+        database_json.put(player, player_db);
     }
 
-    protected static void listVillagers() {
+    protected static void listVillagers(UUID player) {
         System.out.println("Listing villagers");
+        JSONObject player_db = (JSONObject) database_json.get(player);
+        for (Map.Entry<String, JSONObject> villager : player_db.entrySet()) {
+            System.out.println(villager.getValue().get("name"));
+        }
     }
 
     protected static void save() {
-        database.toString();
+        Path path = Path.of(System.getProperty("user.dir"), "plugins/Villagerpedia/database.json");
+        //write database.toString() to path
+        try {
+            Files.writeString(path, database_json.toJSONString(), StandardOpenOption.CREATE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         System.out.println("Database save");
     }
 }
