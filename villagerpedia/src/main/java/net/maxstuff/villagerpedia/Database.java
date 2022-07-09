@@ -72,25 +72,56 @@ public class Database {
         return database;
     }
 
-    /* Other methods protected by singleton-ness */
-    protected static void updateVillager(UUID player, JSONObject villager) {
-        System.out.println(player);
+    private static JSONObject getPlayerDB(UUID player) {
         JSONObject player_db;
         if (database_json.containsKey(player)) {
             player_db = (JSONObject) database_json.get(player);
         } else {
             player_db = new JSONObject();
         }
-        player_db.put(villager.get("uuid"),villager);
+        return player_db;
+    }
+
+    private static void setPlayerDBItem(UUID player, Object key, Object value) {
+        JSONObject player_db = getPlayerDB(player);
+        player_db.put(key, value);
         database_json.put(player, player_db);
     }
 
-    protected static void listVillagers(UUID player) {
-        System.out.println("Listing villagers");
-        JSONObject player_db = (JSONObject) database_json.get(player);
-        for (Map.Entry<String, JSONObject> villager : player_db.entrySet()) {
-            System.out.println(villager.getValue().get("name"));
+    private static JSONArray getVillagers(UUID player) {
+        JSONArray villagers;
+        JSONObject player_db = getPlayerDB(player);
+
+        if (database_json.containsKey("villagers")) {
+            villagers = (JSONArray) player_db.get("villagers");
+        } else {
+            villagers = new JSONArray();
         }
+        return villagers;
+    }
+
+    /* Other methods protected by singleton-ness */
+    protected static void updateVillager(UUID player, JSONObject villager) {
+        System.out.println(player);
+        
+        JSONArray villagers = getVillagers(player);
+
+        villagers.add(villager);
+
+        setPlayerDBItem(player, "villagers", villagers);
+    }
+
+    protected static Object getDefaultInterface(UUID player) {
+        JSONObject player_db = getPlayerDB(player);
+        if (player_db.containsKey("default_interface")) {
+            return player_db.get("default_interface");
+        } else {
+            return null;
+        }
+    }
+
+    protected static void setDefaultInterface(UUID player, Object default_interface) {
+        setPlayerDBItem(player, "default_interface", default_interface);
     }
 
     protected static void save() {

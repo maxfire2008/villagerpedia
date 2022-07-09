@@ -34,6 +34,18 @@
       <artifactId>json-simple</artifactId>
       <version>1.1.1</version>
     </dependency>
+    <dependency>
+      <groupId>dev.jorel</groupId>
+      <artifactId>commandapi-core</artifactId>
+      <version>8.4.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>dev.jorel</groupId>
+      <artifactId>commandapi-annotations</artifactId>
+      <version>8.4.1</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
   <build>
     <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
@@ -45,5 +57,21 @@
         </includes>
       </resource>
     </resources>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+        <configuration>
+          <annotationProcessorPaths>
+            <path>
+              <groupId>dev.jorel</groupId>
+              <artifactId>commandapi-annotations</artifactId>
+              <version>8.4.1</version>
+            </path>
+          </annotationProcessorPaths>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
 </project>

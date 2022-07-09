@@ -2,3 +2,15 @@ main: net.maxstuff.villagerpedia.App
 name: villagerpedia
 version: 1.0-SNAPSHOT
 api-version: 1.19
+
+permissions:
+  villagerpedia.*:
+    description: Wildcard permission
+    default: op
+    children:
+      villagerpedia.registervillagers: true
+
+  villagerpedia.registervillagers:
+    description: Allows you to register villagers to the database when you right click on them.
+    default: true
+  
